@@ -29,8 +29,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Define the HTTP handler for /quotes endpoint
-	http.HandleFunc("/quotes", func(w http.ResponseWriter, r *http.Request) {
+	// Define the HTTP handler for /cotacao endpoint
+	http.HandleFunc("/cotacao", func(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(context.Background(), 200*time.Millisecond)
 		defer cancel()
 

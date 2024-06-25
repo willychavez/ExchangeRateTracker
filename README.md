@@ -2,12 +2,12 @@
 
 ## Overview
 
-This project consists of a server (server.go) that fetches the current exchange rate from USD to BRL and stores it in a SQLite database.
+This project consists of two Go services: a server (`server.go`) that fetches the current exchange rate from USD to BRL and stores it in a SQLite database, and a client (`client.go`) that requests the exchange rate from the server and saves it to a text file.
 
 ## Project Structure
 
 - `server.go`: Service that fetches the exchange rate from an external API, stores it in a database, and exposes an HTTP endpoint.
-
+- `client.go`: Client that requests the exchange rate from the server and saves it to a text file.
 
 ## Prerequisites
 
@@ -59,10 +59,22 @@ This project consists of a server (server.go) that fetches the current exchange 
 2. Start the server:
 
     ```sh
+    cd server/
     go run server.go
     ```
 
-    The server will listen on port `8080` and has an endpoint `/quotes` to fetch the exchange rate.
+    The server will listen on port `8080` and has an endpoint `/cotacao` to fetch the exchange rate.
+
+### Running the Client
+
+1. In another terminal, run the client:
+
+    ```sh
+    cd client/
+    go run client.go
+    ```
+
+    The client will request the exchange rate from the server and save the result to a `cotacao.txt` file.
 
 ## Code Explanation
 
@@ -70,16 +82,22 @@ This project consists of a server (server.go) that fetches the current exchange 
 
 - Opens a connection to the SQLite database.
 - Creates a `quotes` table if it does not exist.
-- Defines an HTTP endpoint `/quotes` that:
+- Defines an HTTP endpoint `/cotacao` that:
   - Fetches the exchange rate from the `economia.awesomeapi.com.br` API.
   - Saves the exchange rate to the database.
   - Returns the exchange rate as a JSON response.
+
+### Client (`client.go`)
+
+- Defines a context with a timeout for the request.
+- Requests the exchange rate from the server.
+- Saves the response to a `cotacao.txt` file.
 
 ## Examples
 
 ### API Response
 
-A typical response from the server's `/quotes` API will be:
+A typical response from the server's `/cotacao` API will be:
 
 ```json
 {
@@ -87,11 +105,12 @@ A typical response from the server's `/quotes` API will be:
 }
 ```
 
-This value will be saved to the database by the server and to a `quote.txt` file by the client.
+This value will be saved to the database by the server and to a `cotacao.txt` file by the client, in the format 'Dólar:{valor}'.
 
 ## Common Issues
 
 - **Server not running**: Ensure the server is running before starting the client.
+- **Network issues**: Verify the client can reach the server on the correct port.
 - **SQLite3 not installed**: Ensure SQLite3 is installed and properly configured.
 
 ## Contribution
